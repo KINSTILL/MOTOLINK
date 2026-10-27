@@ -121,10 +121,13 @@ const ARTICLES = [
   },
   {
     title: "ARTICLE 27 — SIGNALEMENT, LITIGES ET DROIT APPLICABLE",
-
-
-    body: "27.1 SIGNALEMENT : Tout utilisateur peut signaler un comportement abusif (fraude, harcèlement, fausse preuve, non-respect des présentes CGU) via le support MotoLink. MotoLink peut suspendre ou résilier un compte en cas de violation grave ou répétée des CGU,
-
+    body: "27.1 SIGNALEMENT : Tout utilisateur peut signaler un comportement abusif (fraude, harcèlement, fausse preuve, non-respect des présentes CGU) via le support MotoLink. MotoLink peut suspendre ou résilier un compte en cas de violation grave ou répétée des CGU, sans que cela constitue un préjudice indemnisable pour l'utilisateur concerné.\n\n27.2 LITIGES ENTRE UTILISATEURS : Les litiges relatifs à la vente, au transport ou au paiement relèvent exclusivement des utilisateurs concernés. La preuve de livraison scellée MotoLink est un élément de fait mis à leur disposition, sans valeur de décision juridictionnelle. MotoLink n'arbitre pas les litiges et n'intervient pas dans les transactions.\n\n27.3 DROIT APPLICABLE : Les présentes CGU sont régies par le droit camerounais. En cas de litige relatif à l'utilisation de la plateforme, les parties s'efforceront d'abord de trouver une solution amiable. À défaut, les tribunaux compétents de Douala (Cameroun) seront seuls saisis.\n\n27.4 SÉVERABILITÉ : Si une clause des présentes CGU était jugée nulle ou inapplicable, les autres clauses conserveraient leur pleine validité et leur plein effet.",
+  },
+  {
+    title: "ARTICLE 30 — CARNET DE BORD PUBLIC",
+    body: "Le livreur peut activer un carnet de bord public partageable via un lien unique. Ce carnet expose uniquement des informations non sensibles : nom, note moyenne, nombre de livraisons, badges de vérification (KYC, syndicat, CUD, parrainage), zones de travail déclarées. Aucune donnée personnelle (téléphone, email, coordonnées bancaires, position GPS) n'est exposée. Le livreur peut désactiver son carnet à tout moment. MotoLink ne garantit pas l'exactitude des badges affichés et ne peut être tenu responsable de l'usage fait par des tiers des informations publiques.",
+  },
+];
 export default function LegalCguPage() {
   return (
     <main className="min-h-dvh bg-slate-950 px-4 py-6 text-slate-50">
@@ -185,4 +188,3 @@ export default function LegalCguPage() {
     </main>
   );
 }
-
