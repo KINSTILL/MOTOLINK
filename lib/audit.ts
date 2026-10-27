@@ -41,6 +41,19 @@ export interface VerifyChainResult {
 }
 
 /**
+ * Sérialise localement les appels à logEvent() : sans ce verrou, deux écritures
+ * concurrentes dans le même processus pourraient lire le même « dernier maillon »
+ * et chaîner sur le même previousHash (fourche). Combiné à la colonne `sequence`
+ * (monotone), cela garantit une chaîne à maillon unique.
+ */
+let logEventQueue: Promise<unknown> = Promise.resolve();
+function withAuditLock<T>(fn: () => Promise<T>): Promise<T> {
+  const run = logEventQueue.then(fn, fn);
+  logEventQueue = run.catch(() => undefined);
+  return run;
+}
+
+/**
  * Calcule le hash SHA-256 d'un maillon du journal d'audit :
  * SHA256(previousHash + id + eventType + entityId + actorId + createdAt)
  */
@@ -101,6 +114,24 @@ export async function logEvent(
   actorId?: string | null,
   metadata?: Record<string, unknown> | null
 ): Promise<void> {
+  // Écriture sérialisée : deux logEvent() concurrents ne peuvent pas chaîner
+  // deux maillons sur le même previousHash.
+  return withAuditLock(() =>
+    logEventUnlocked(eventType, entityType, entityId, actorId, metadata)
+  );
+}
+
+/**
+ * Écriture effective du maillon. Toujours exécutée sous le verrou logEventQueue.
+ * Ne lève jamais d'exception.
+ */
+async function logEventUnlocked(
+  eventType: AuditEventType,
+  entityType: AuditEntityType,
+  entityId: string,
+  actorId?: string | null,
+  metadata?: Record<string, unknown> | null
+): Promise<void> {
   try {
     const actorIp = extractRequestIp(metadata);
 
@@ -126,12 +157,15 @@ export async function logEvent(
       }
     }
 
-    // a. Récupère previousHash (dernier log chaîné)
+    // a. Récupère previousHash (dernier log chaîné).
+    //    On trie par `sequence` (auto-increment monotone) et non par `createdAt` :
+    //    deux logs écrits dans la même milliseconde pouvaient sinon chaîner sur le
+    //    même previousHash, créant une fourche dans la chaîne d'audit.
     const lastLog = await prisma.auditLog.findFirst({
       where: {
         currentHash: { not: "" },
       },
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      orderBy: [{ sequence: "desc" }],
       select: {
         currentHash: true,
         createdAt: true,
@@ -193,7 +227,7 @@ export async function verifyChain(
     where: {
       currentHash: { not: "" },
     },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    orderBy: [{ sequence: "asc" }],
   });
 
   if (logs.length === 0) {

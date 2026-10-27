@@ -48,6 +48,7 @@ const TEST_FILES = [
   { name: "Appels Livreur & Client Absent", file: "lib/__tests__/driver-calls.test.ts", category: "Coordination Livraison" },
   { name: "Score de Fiabilité Client", file: "lib/__tests__/buyer-reliability.test.ts", category: "Confiance Client" },
   { name: "Carnet de Bord Livreur", file: "lib/__tests__/driver-carnet.test.ts", category: "Rassurance" },
+  { name: "Contrat PDF", file: "lib/__tests__/contract-pdf.test.ts", category: "Rassurance" },
   ];
 
 async function runE2EFullScenario(): Promise<void> {

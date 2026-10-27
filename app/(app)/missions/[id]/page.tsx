@@ -22,6 +22,7 @@ import {
   Bike,
   Calendar,
   ExternalLink,
+  FileText,
   Flame,
   Image as ImageIcon,
   MapPin,
@@ -353,6 +354,23 @@ export default async function MissionDetailPage({
             />
           )}
         </section>
+      )}
+
+      {/* Contrat PDF de livraison (N7) — vendeur ou livreur assigné */}
+      {mission.contractPdfUrl && (isMissionVendor || isMissionDriver) && (
+        <a
+          href={`/api/missions/${mission.id}/contract`}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="contract-pdf-link"
+          className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm transition active:scale-[0.99]"
+        >
+          <span className="flex items-center gap-2 font-semibold text-slate-100">
+            <FileText className="h-4 w-4 text-primary" />
+            📄 Contrat de livraison (PDF)
+          </span>
+          <span className="text-sm text-slate-400">Télécharger</span>
+        </a>
       )}
 
       {/* Galerie Photos de l'article en grand */}

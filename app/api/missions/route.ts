@@ -585,6 +585,64 @@ export async function POST(request: Request) {
       );
     }
 
+    // ── N7 — Contrat PDF de livraison (non-bloquant) ───────────────────────
+    // Généré uniquement si le vendeur a activé l'option generateContractPdf.
+    try {
+      const vendorForContract = await prisma.user.findUnique({
+        where: { id: session.userId },
+        select: { generateContractPdf: true, shopName: true, name: true, phone: true },
+      });
+
+      if (vendorForContract?.generateContractPdf) {
+        const { generateContractPdf, attachContractToMission } = await import(
+          "@/lib/contract-pdf"
+        );
+
+        const { buffer, hash } = await generateContractPdf({
+          missionId: result.mission.id,
+          shopName: vendorForContract.shopName || vendorForContract.name || "Vendeur",
+          vendorPhone: vendorForContract.phone || "",
+          driverName: null, // pas encore assigné à la création
+          buyerName: result.mission.buyerName || null,
+          buyerPhone: result.mission.buyerPhone,
+          address: result.mission.address,
+          description: result.mission.description || null,
+          price: Number(result.mission.price),
+          createdAt: result.mission.createdAt,
+        });
+
+        await attachContractToMission({
+          missionId: result.mission.id,
+          buffer,
+          hash,
+        });
+
+        await logEvent(
+          "CONTRACT_PDF_GENERATED",
+          "MISSION",
+          result.mission.id,
+          session.userId,
+          { hash }
+        );
+      }
+    } catch (contractErr) {
+      console.error(
+        "[POST /api/missions] Génération du contrat PDF échouée (non-bloquant) :",
+        contractErr
+      );
+      try {
+        await logEvent(
+          "CONTRACT_PDF_FAILED",
+          "MISSION",
+          result.mission.id,
+          session.userId,
+          { error: String(contractErr) }
+        );
+      } catch {
+        // ignore
+      }
+    }
+
     // Le token de confirmation n'est jamais renvoyé au vendeur : seul l'acheteur le reçoit.
     const { buyerConfirmToken: _omitToken, deliveryCode: _omitCode, ...missionForResponse } = result.mission;
 

@@ -48,6 +48,7 @@ model User {
   driverSlug       String?       @unique   // N6 : slug du carnet de bord public (ex: "jean-m-2026")
   carnetVisible    Boolean       @default(false)  // N6 : carnet public visible ? (OFF par defaut)
   carnetZones      String?                   // N6 : zones de travail declarees (texte libre)
+  generateContractPdf Boolean     @default(false)  // N7 : contrat PDF a chaque mission
   acceptedCguAt       DateTime?
   acceptedPrivacyAt   DateTime?
   createdAt           DateTime      @default(now())
@@ -128,6 +129,9 @@ model AuditLog {
   metadata     Json?
   previousHash String   @default("GENESIS")
   currentHash  String   @default("")
+  // Ordre d'append strictement monotone : garantit un chaînage correct même pour
+  // des logs créés dans la même milliseconde (évite les fourches de chaîne).
+  sequence     Int      @unique @default(autoincrement())
   action       String?
   targetUserId String?
   documentId   String?
@@ -192,6 +196,9 @@ model Mission {
   deliveryCodeSentAt       DateTime?
   deliveryCodeVerifiedAt   DateTime?
   deliveryCodeAttempts     Int           @default(0)
+  contractPdfUrl      String?       // N7 : URL du contrat PDF
+  contractGeneratedAt DateTime?     // N7 : horodatage du contrat
+  contractHash        String?       // N7 : SHA-256 du contrat
   driverCallBeforeDepartureAt     DateTime?  // horodatage du clic livreur "Appeler" après PICKED_UP (ne prouve pas que l'appel a abouti)
   driverCallBeforeDepartureMethod String?    // "tel" | "whatsapp"
   driverCallAtArrivalAt           DateTime?  // horodatage du clic livreur "Appeler" avant NEARBY
@@ -416,6 +423,10 @@ enum AuditEventType {
   // N6 — Carnet de bord public
   CARNET_VISIBILITY_TOGGLED
   CARNET_VIEWED
+  // N7 - Contrat PDF de livraison
+  CONTRACT_PDF_GENERATED
+  CONTRACT_PDF_FAILED
+  CONTRACT_PDF_DOWNLOADED
 }
 
 model DirectoryContactRequest {

@@ -127,6 +127,10 @@ const ARTICLES = [
     title: "ARTICLE 30 — CARNET DE BORD PUBLIC",
     body: "Le livreur peut activer un carnet de bord public partageable via un lien unique. Ce carnet expose uniquement des informations non sensibles : nom, note moyenne, nombre de livraisons, badges de vérification (KYC, syndicat, CUD, parrainage), zones de travail déclarées. Aucune donnée personnelle (téléphone, email, coordonnées bancaires, position GPS) n'est exposée. Le livreur peut désactiver son carnet à tout moment. MotoLink ne garantit pas l'exactitude des badges affichés et ne peut être tenu responsable de l'usage fait par des tiers des informations publiques.",
   },
+  {
+    title: "ARTICLE 31 — CONTRAT PDF DE LIVRAISON",
+    body: "Le vendeur peut activer la génération automatique d'un contrat PDF à chaque mission. Ce contrat formalise l'accord entre le vendeur et le livreur (parties, description du colis, prix, conditions). Il est généré automatiquement et n'est pas signé par MotoLink. MotoLink n'est pas partie à ce contrat et ne peut être tenu responsable de son exécution ou de son inexécution. Le contrat est accessible au vendeur et au livreur assigné. L'empreinte SHA-256 affichée permet de vérifier l'intégrité du document. Le vendeur reste responsable de l'usage qu'il fait de ce contrat.",
+  },
 ];
 export default function LegalCguPage() {
   return (
