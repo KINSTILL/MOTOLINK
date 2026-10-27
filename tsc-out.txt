@@ -1,0 +1,12 @@
+lib/__tests__/driver-carnet.test.ts(167,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(176,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(186,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(196,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(211,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(235,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.

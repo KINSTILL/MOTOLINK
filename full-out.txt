@@ -1,0 +1,115 @@
+
+============================================================
+   🚀 MOTOLINK — SUITE COMPLÈTE DE TESTS & QUALIFICATION   
+============================================================
+
+⏳ [1/3] Vérification TypeScript (`tsc --noEmit`)...
+❌ Erreur de typage TypeScript
+lib/__tests__/driver-carnet.test.ts(167,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(176,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUr
+⏳ [2/3] Exécution des 26 suites de tests modulaires...
+
+  [1/26] Mode Hors-Ligne & PWA                      ✅ PASSÉ (16.35s)
+  [2/26] Suivi Acheteur Brandé & API                ✅ PASSÉ (6.24s)
+  [3/26] Conformité Légale (CGU/Privacy)            ✅ PASSÉ (2.43s)
+  [4/26] Journal d'Audit Chaîné SHA-256             ✅ PASSÉ (1.55s)
+  [5/26] Horodatage Certifié TSA RFC 3161           ✅ PASSÉ (6.75s)
+  [6/26] Preuve Scellée (PDF, QR & Hash)            ✅ PASSÉ (2.25s)
+  [7/26] 4 Boutons de Jalons (Checkpoints)          ✅ PASSÉ (2.32s)
+  [8/26] Photo Départ & Présence Arrivée            ✅ PASSÉ (3.23s)
+  [9/26] Abonnements Hebdo & Notch Pay              ✅ PASSÉ (2.21s)
+  [10/26] Livreurs Préférés & Types Mission          ✅ PASSÉ (1.98s)
+  [11/26] Classification IA Jev & Fallbacks          ✅ PASSÉ (4.93s)
+  [12/26] Notifications Multicanales (WhatsApp/SMS)  ✅ PASSÉ (1.31s)
+  [13/26] Statut Livreur à 3 États                   ✅ PASSÉ (5.75s)
+  [14/26] Ma Flotte Vendeur (4 Onglets)              ✅ PASSÉ (1.90s)
+  [15/26] Notification Coursiers Hors-Ligne          ✅ PASSÉ (2.07s)
+  [16/26] Parrainage Vendeur -> Livreur              ✅ PASSÉ (2.68s)
+  [17/26] Parrainage Livreur -> Livreur              ✅ PASSÉ (27.14s)
+  [18/26] Notation Mutuelle & Tableau d'Honneur      ✅ PASSÉ (2.68s)
+  [19/26] Annuaire Volontaire des Livreurs           ✅ PASSÉ (4.42s)
+  [20/26] Programmation de Livraisons & Agenda       ✅ PASSÉ (4.66s)
+  [21/26] Social Commerce (Lien & Smart Paste)       ✅ PASSÉ (9.59s)
+  [22/26] Confirmation de Commande (Appel & Lien)    ✅ PASSÉ (4.12s)
+  [23/26] Code de Remise à 4 Chiffres                ✅ PASSÉ (4.81s)
+  [24/26] Appels Livreur & Client Absent             ✅ PASSÉ (4.72s)
+  [25/26] Score de Fiabilité Client                  ✅ PASSÉ (2.17s)
+  [26/26] Carnet de Bord Livreur                     ✅ PASSÉ (1.72s)
+
+⏳ [3/3] Exécution du scénario E2E complet de bout en bout...
+
+🔄 ========================================================
+🏁 EXÉCUTION DU SCÉNARIO E2E : CYCLE COMPLET DE LIVRAISON
+========================================================
+
+✅ 1. Vendeur créé avec CGU et abonnement actif (Quincaillerie Moderne Akwa)
+✅ 2. Livreur vérifié avec badge syndicat créé (Jean E2E Livreur)
+✅ 3. Livreur ajouté aux favoris du vendeur
+✅ 4. Mission GAS créée certifiée gaz & IA Jev (ID: 3fa9f49d-fc73-4ac1-8763-df883cf8605a)
+✅ 5. Proposition directe acceptée par le coursier favori
+✅ 6. Parcours complet des 4 jalons validé avec audit log
+✅ 7. Preuve scellée SHA-256 (3efa45f9ea6bb196...) et horodatée TSA
+✅ 7b. Vérification cryptographique du token TSA : valid=false
+✅ 8. Chaîne d'audit cryptographique SHA-256 100% intègre
+✅ 9. Nettoyage des données de test terminé
+
+✅ Scénario E2E réussi avec succès (1.17s)
+
+============================================================
+            📊 TABLEAU RÉCAPITULATIF DES TESTS              
+============================================================
+
+| #  | Module / Suite                          | Catégorie             | Statut  | Durée    |
+|----|-----------------------------------------|-----------------------|---------|----------|
+| 1  | Contrôle Typage TypeScript              | Qualité Code          | ❌ FAIL  |   56.43s |
+| 2  | Mode Hors-Ligne & PWA                   | PWA & Offline         | ✅ OK    |   16.35s |
+| 3  | Suivi Acheteur Brandé & API             | Tracking Public       | ✅ OK    |    6.24s |
+| 4  | Conformité Légale (CGU/Privacy)         | Juridique             | ✅ OK    |    2.43s |
+| 5  | Journal d'Audit Chaîné SHA-256          | Sécurité & Audit      | ✅ OK    |    1.55s |
+| 6  | Horodatage Certifié TSA RFC 3161        | Cryptographie         | ✅ OK    |    6.75s |
+| 7  | Preuve Scellée (PDF, QR & Hash)         | Preuve de Livraison   | ✅ OK    |    2.25s |
+| 8  | 4 Boutons de Jalons (Checkpoints)       | Livraison             | ✅ OK    |    2.32s |
+| 9  | Photo Départ & Présence Arrivée         | Jalons & Présence     | ✅ OK    |    3.23s |
+| 10 | Abonnements Hebdo & Notch Pay           | Monétisation          | ✅ OK    |    2.21s |
+| 11 | Livreurs Préférés & Types Mission       | Missions              | ✅ OK    |    1.98s |
+| 12 | Classification IA Jev & Fallbacks       | Intelligence Artificielle | ✅ OK    |    4.93s |
+| 13 | Notifications Multicanales (WhatsApp/SMS) | Notifications         | ✅ OK    |    1.31s |
+| 14 | Statut Livreur à 3 États                | Disponibilité Livreur | ✅ OK    |    5.75s |
+| 15 | Ma Flotte Vendeur (4 Onglets)           | Flotte Vendeur        | ✅ OK    |    1.90s |
+| 16 | Notification Coursiers Hors-Ligne       | Notifications Livreur | ✅ OK    |    2.07s |
+| 17 | Parrainage Vendeur -> Livreur           | Parrainage & Flotte   | ✅ OK    |    2.68s |
+| 18 | Parrainage Livreur -> Livreur           | Parrainage & Badges   | ✅ OK    |   27.14s |
+| 19 | Notation Mutuelle & Tableau d'Honneur   | Réputation & Score    | ✅ OK    |    2.68s |
+| 20 | Annuaire Volontaire des Livreurs        | Annuaire & Flotte     | ✅ OK    |    4.42s |
+| 21 | Programmation de Livraisons & Agenda    | Agenda & Programmation | ✅ OK    |    4.66s |
+| 22 | Social Commerce (Lien & Smart Paste)    | Social Commerce       | ✅ OK    |    9.59s |
+| 23 | Confirmation de Commande (Appel & Lien) | Confirmation Commande | ✅ OK    |    4.12s |
+| 24 | Code de Remise à 4 Chiffres             | Sécurité Livraison    | ✅ OK    |    4.81s |
+| 25 | Appels Livreur & Client Absent          | Coordination Livraison | ✅ OK    |    4.72s |
+| 26 | Score de Fiabilité Client               | Confiance Client      | ✅ OK    |    2.17s |
+| 27 | Carnet de Bord Livreur                  | Rassurance            | ✅ OK    |    1.72s |
+| 28 | Scénario E2E Cycle Complet              | End-to-End            | ✅ OK    |    1.17s |
+
+------------------------------------------------------------
+RÉSULTAT GLOBAL : 27/28 SUITES PASSÉES AVEC SUCCÈS
+DURÉE TOTALE    : 187.57s
+------------------------------------------------------------
+
+❌ ÉCHEC : 1 test(s) ont échoué.
+
+Détails échec [Contrôle Typage TypeScript] :
+lib/__tests__/driver-carnet.test.ts(167,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(176,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(186,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(196,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(211,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+lib/__tests__/driver-carnet.test.ts(235,7): error TS2345: Argument of type 'Request' is not assignable to parameter of type 'NextRequest'.
+  Type 'Request' is missing the following properties from type 'NextRequest': cookies, geo, ip, nextUrl, and 3 more.
+

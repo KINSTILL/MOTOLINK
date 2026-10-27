@@ -1,0 +1,122 @@
+🚀 Exécution de la suite de tests : Confirmation de commande vendeur & acheteur...
+
+📦 TEST 1 : generateBuyerConfirmToken() → 32 caractères hexadécimaux
+✅ TEST 1 validé : token de 32 caractères hex, unique.
+
+📦 TEST 2 : POST /api/missions sans confirmation (orderConfirmed false / absent) → 400
+✅ TEST 2 validé : création refusée sans confirmation (400), aucune mission créée.
+
+📦 TEST 3 : POST /api/missions avec orderConfirmed = true → mission créée
+✅ TEST 3 validé : mission créée avec ses champs habituels et un token acheteur.
+
+📦 TEST 3b : Notification acheteur mission_created + demande de confirmation
+✅ TEST 3b validé : mission_created inchangé + lien de confirmation envoyé.
+
+📦 TEST 4 : POST /api/missions avec callInitiatedAt → stocké et audité
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : mission_created
+💬 Message  : Bonjour Marcelle Fouda, Boutique Confirm 1 vous envoie un colis. Suivez-le : https://motolink.cm/s/abe23128-576c-45dc-83fa-0e551793ed5e
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : buyer_confirm_request
+💬 Message  : {"buyerName":"Marcelle Fouda","shopName":"Boutique Confirm 1","driverName":"Livreur MotoLink","link":"https://motolink.cm/confirm/20d9299b-0813-427b-af69-4b85fd7dadaf/3ae4e41478610ccda27eeab11a001c67"}
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : delivery_code
+💬 Message  : Bonjour Marcelle Fouda, votre livreur arrive bientôt. Votre code de remise est : 9091. Ne le donnez qu'après avoir reçu votre colis.
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : mission_created
+💬 Message  : Bonjour Marcelle Fouda, Boutique Confirm 1 vous envoie un colis. Suivez-le : https://motolink.cm/s/292425c6-eaab-4888-86ad-bd59aeca11dd
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : buyer_confirm_request
+💬 Message  : {"buyerName":"Marcelle Fouda","shopName":"Boutique Confirm 1","driverName":"Livreur MotoLink","link":"https://motolink.cm/confirm/0e39b1d7-bbdd-433e-af46-990cca539b83/51dfaca5cfa46c7a7f1586160e1f1e2c"}
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : delivery_code
+💬 Message  : Bonjour Marcelle Fouda, votre livreur arrive bientôt. Votre code de remise est : 9983. Ne le donnez qu'après avoir reçu votre colis.
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : mission_created
+💬 Message  : Bonjour Marcelle Fouda, Boutique Confirm 1 vous envoie un colis. Suivez-le : https://motolink.cm/s/78188f88-0039-4d51-9269-c4d39497e494
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : buyer_confirm_request
+💬 Message  : {"buyerName":"Marcelle Fouda","shopName":"Boutique Confirm 1","driverName":"Livreur MotoLink","link":"https://motolink.cm/confirm/4dd3c3eb-7193-4d61-a7ce-d7f234a21351/65c15280d9074c7b6c79c7ac08117cdd"}
+==========================================
+
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : delivery_code
+💬 Message  : Bonjour Marcelle Fouda, votre livreur arrive bientôt. Votre code de remise est : 2622. Ne le donnez qu'après avoir reçu votre colis.
+==========================================
+
+✅ TEST 4 validé : appel stocké (tel & WhatsApp), audits créés, entrées invalides rejetées.
+
+📦 TEST 5 : POST /api/public/missions/[id]/buyer-confirm avec token valide
+✅ TEST 5 validé : confirmation enregistrée, auditée, idempotente.
+
+📦 TEST 6 : Token invalide / manquant / mission inconnue
+✅ TEST 6 validé : 403 / 400 / 404 / 429 conformes, aucune confirmation indue.
+
+📦 TEST 7 : API publique de suivi inchangée et sans fuite du token
+✅ TEST 7 validé : suivi public intact, token jamais exposé.
+
+📦 TEST 8 : Acceptation livreur d'une mission confirmée
+
+==========================================
+🟢 [WHATSAPP MOCK - META BUSINESS API]
+📞 To       : +237677889900
+📋 Template : driver_assigned
+💬 Message  : Bonjour Marcelle Fouda, un livreur (DRIVER Confirm 2) est en route avec votre colis Boutique Confirm 1. Suivez-le : https://motolink.cm/s/f099fc6f-efa5-4baa-98ba-ff82d6f14f71
+==========================================
+
+✅ TEST 8 validé : acceptation livreur inchangée.
+
+📦 TEST 9 : Les brouillons ne passent pas par la confirmation
+✅ TEST 9 validé : brouillons (lien / Smart Paste / finalisation) inchangés.
+
+📦 TEST 10 : Interface (bloc, bouton, modale, /confirm, dashboard, CGU)
+✅ TEST 10 validé : interface et CGU Article 24 conformes.
+
+📦 TEST 11 : Enums AuditEventType
+✅ TEST 11 validé : nouveaux événements présents, anciens conservés.
+
+📦 TEST 12 : Intégrité cryptographique de la chaîne d'audit SHA-256
+✅ TEST 12 validé : chaîne d'audit intègre (188 logs).
+
+🎉 TOUS LES TESTS DE CONFIRMATION DE COMMANDE ONT RÉUSSI AVEC SUCCÈS !

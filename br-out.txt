@@ -1,0 +1,27 @@
+🚀 Exécution de la suite : Score de fiabilité client (N5)...
+
+📦 TEST 1 : hashBuyerPhone() → SHA-256 stable + normalisation
+✅ TEST 1 validé
+
+📦 TEST 2 : < 2 missions historiques → « Nouveau client » (neutre)
+✅ TEST 2 validé
+
+📦 TEST 3 : historique suffisant → label + taux calculés
+✅ TEST 3 validé : score/taux/label cohérents
+
+📦 TEST 4 : buyerPhoneHash renseigné en base, jamais le numéro en clair
+✅ TEST 4 validé
+
+📦 TEST 6 : /api/buyer-reliability — vendeur sans opt-in → enabled:false
+✅ TEST 6 validé
+
+📦 TEST 7 : /api/buyer-reliability — vendeur avec opt-in → agrégat (sans PII)
+✅ TEST 7 validé : agrégat sans PII
+
+📦 TEST 8 : /api/buyer-reliability — non-vendeur → enabled:false
+✅ TEST 8 validé
+
+📦 TEST 9 : Non-régression (composant + intégration page + schéma)
+✅ TEST 9 validé : aucune régression détectée
+
+🎉 TOUS LES TESTS DU SCORE DE FIABILITÉ CLIENT ONT RÉUSSI !

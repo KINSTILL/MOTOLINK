@@ -1,0 +1,2 @@
+lib/__tests__/driver-carnet.test.ts(239,5): error TS1136: Property assignment expected.
+lib/__tests__/driver-carnet.test.ts(239,6): error TS1005: ')' expected.

@@ -1,0 +1,18 @@
+🚀 Exécution de la suite : Carnet de bord livreur (N6)...
+
+📦 TEST 1 : generateSlug() → normalisation + suffixe
+✅ TEST 1 validé
+
+📦 TEST 2 : carnet non visible / non livreur / inconnu → null
+✅ TEST 2 validé
+
+📦 TEST 3 : carnet visible → agrégats, badges, initiales
+✅ TEST 3 validé : moyenne 4.0, 2 livraisons, badges corrects
+
+📦 TEST 4 : aucune donnée sensible exposée
+✅ TEST 4 validé : carnet 100% non sensible
+
+📦 TEST 5 : GET /api/public/drivers/[slug] → 200 / 404
+❌ ÉCHEC DES TESTS : TypeError: Cannot destructure property 'params' of 'undefined' as it is undefined.
+    at GET [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mapp\api\public\drivers\[slug]\route.ts:11:5[90m)[39m
+    at runTests [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mlib\__tests__\driver-carnet.test.ts:166:25[90m)[39m

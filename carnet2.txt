@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Transform failed with 1 error:
+C:\Users\Famille Mouelnjock\Documents\MOTOLINK\lib\__tests__\driver-carnet.test.ts:239:4: ERROR: Expected identifier but found ")"
+    at failureErrorWithLog [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mnode_modules\[4mesbuild[24m\lib\main.js:1752:15[90m)[39m
+    at [90mC:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mnode_modules\[4mesbuild[24m\lib\main.js:1019:50
+    at responseCallbacks.<computed> [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mnode_modules\[4mesbuild[24m\lib\main.js:886:9[90m)[39m
+    at handleIncomingPacket [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mnode_modules\[4mesbuild[24m\lib\main.js:941:12[90m)[39m
+    at Socket.readFromStdout [90m(C:\Users\Famille Mouelnjock\Documents\MOTOLINK\[39mnode_modules\[4mesbuild[24m\lib\main.js:864:7[90m)[39m
+[90m    at Socket.emit (node:events:514:28)[39m
+[90m    at addChunk (node:internal/streams/readable:568:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:519:3)[39m
+[90m    at Readable.push (node:internal/streams/readable:399:5)[39m
+[90m    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)[39m {
+  name: [32m'TransformError'[39m
+}
+
+Node.js v24.21.0

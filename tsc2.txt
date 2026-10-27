@@ -1,0 +1,5 @@
+.next/types/app/api/public/drivers/[slug]/route.ts(33,7): error TS2344: Type '{ __tag__: "GET"; __param_position__: "first"; __param_type__: { params: { slug: string; }; }; }' does not satisfy the constraint 'ParamCheck<Request | NextRequest>'.
+  Types of property '__param_type__' are incompatible.
+    Type '{ params: { slug: string; }; }' is not assignable to type 'Request | NextRequest'.
+lib/__tests__/driver-carnet.test.ts(168,7): error TS2554: Expected 1 arguments, but got 2.
+lib/__tests__/driver-carnet.test.ts(177,7): error TS2554: Expected 1 arguments, but got 2.

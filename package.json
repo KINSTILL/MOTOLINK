@@ -1,0 +1,59 @@
+{
+  "name": "motolink",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "tsx scripts/run-full-suite.ts",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@peculiar/asn1-schema": "^2.11.0",
+    "@peculiar/asn1-tsp": "^2.11.0",
+    "@prisma/client": "^5.21.1",
+    "@serwist/next": "^9.0.11",
+    "@types/node-forge": "^1.3.14",
+    "@types/qrcode": "^1.5.6",
+    "@typesafe-ai/sdk": "^0.7.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.454.0",
+    "next": "14.2.24",
+    "node-forge": "^1.4.0",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-signature-canvas": "^1.0.6",
+    "serwist": "^9.0.11",
+    "socket.io-client": "^4.8.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
+    "twilio": "^6.2.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.14",
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-signature-canvas": "^1.0.5",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "prisma": "^5.21.1",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

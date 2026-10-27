@@ -1,0 +1,593 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(uuid())
+  phone             String        @unique
+  name              String?
+  role              Role
+  verified          Boolean       @default(false)
+  kycStatus         KycStatus     @default(UNVERIFIED)
+  shopName          String?
+  brandingLogoUrl   String?
+  brandingColorHex    String?
+  catalogUrl          String?
+  preferredChannel    String        @default("whatsapp")
+  notificationChannel String        @default("WHATSAPP")
+  subscriptionStatus  String        @default("NONE")
+  driverStatus        DriverStatus  @default(OFFLINE)
+  phoneVisibleToVendor Boolean      @default(true)
+  sponsorVendorId     String?
+  sponsorDriverId     String?
+  referralCode        String?       @unique
+  referralCodeGeneratedAt DateTime?
+  referrerBadge       String?       // "sponsor" | "sponsor_confirmed" | "sponsor_gold" | "sponsor_platinum"
+  referrerCount       Int           @default(0)  // nombre de filleuls COMPLETED
+  lastDeviceFingerprint String?
+  lastIpHash          String?
+  city                String?       // ville d'activité (tableau d'honneur par ville)
+  driverScore         Float         @default(0)  // score de confiance livreur sur 100
+  vendorScore         Float         @default(0)  // score de confiance vendeur sur 100
+  driverRatingCount   Int           @default(0)
+  vendorRatingCount   Int           @default(0)
+  directoryVisible    Boolean       @default(false)  // le livreur consent à apparaître dans l'annuaire
+  directoryVisibleAt  DateTime?                      // date du consentement actif
+  workZones           String[]      @default([])     // zones / quartiers de travail
+  subscriptionPaidBy  String?       // "self" | "vendor" | "driver_referral"
+  referralDiscount    Int           @default(0)  // pourcentage de réduction sur le prochain abonnement
+  referralDiscountUsed Boolean      @default(false)
+  publicSlug          String?       @unique
+  publicSlugCreatedAt DateTime?
+  showBuyerReliability Boolean       @default(false)  // N4 : afficher le score de fiabilité client
+  driverSlug       String?       @unique   // N6 : slug du carnet de bord public (ex: "jean-m-2026")
+  carnetVisible    Boolean       @default(false)  // N6 : carnet public visible ? (OFF par defaut)
+  carnetZones      String?                   // N6 : zones de travail declarees (texte libre)
+  acceptedCguAt       DateTime?
+  acceptedPrivacyAt   DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  vendorMissions    Mission[]        @relation("VendorMissions")
+  driverMissions    Mission[]        @relation("DriverMissions")
+  messages          Message[]
+  ratingsFrom       Rating[]         @relation("FromUser")
+  ratingsTo         Rating[]         @relation("ToUser")
+  tickets           Ticket[]
+  ticketPurchases   TicketPurchase[]
+  subscriptions     Subscription[]
+  kycDocuments      KycDocument[]
+  auditLogs         AuditLog[]
+  favoriteDrivers   FavoriteDriver[]   @relation("UserFavoriteDrivers")
+  favoritedBy       FavoriteDriver[]   @relation("FavoritedAsDriver")
+  sentProposals     DirectProposal[]   @relation("BuyerDirectProposals")
+  receivedProposals DirectProposal[]   @relation("DriverDirectProposals")
+  offlineNotificationsSent     OfflineNotification[] @relation("OfflineNotificationsSent")
+  offlineNotificationsReceived OfflineNotification[] @relation("OfflineNotificationsReceived")
+  invitationsSent   Invitation[]       @relation("InvitationsSent")
+  referralsMade     Referral[]         @relation("ReferralsMade")
+  referralReceived  Referral?          @relation("ReferralReceived")
+  directoryRequestsSent     DirectoryContactRequest[] @relation("DirectoryRequestsSent")
+  directoryRequestsReceived DirectoryContactRequest[] @relation("DirectoryRequestsReceived")
+  smartPasteLogs    SmartPasteLog[]
+}
+
+enum Role {
+  VENDOR
+  DRIVER
+  BUYER
+}
+
+enum KycStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum KycDocType {
+  ID_CARD
+  SYNDICATE_CARD
+  ENROLLMENT_CERT
+}
+
+model KycDocument {
+  id              String     @id @default(uuid())
+  userId          String
+  type            KycDocType
+  status          KycStatus  @default(PENDING)
+  frontKey        String
+  backKey         String?
+  selfieKey       String?
+  syndicateName   String?
+  rejectionReason String?
+  rejectedAt      DateTime?
+  reviewedAt      DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@index([status])
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  eventType    String   @default("")
+  entityType   String   @default("")
+  entityId     String   @default("")
+  actorId      String?
+  actorRole    String?
+  actorIp      String?
+  metadata     Json?
+  previousHash String   @default("GENESIS")
+  currentHash  String   @default("")
+  action       String?
+  targetUserId String?
+  documentId   String?
+  createdAt    DateTime @default(now())
+
+  targetUser   User?    @relation(fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@index([eventType])
+  @@index([actorId])
+  @@index([targetUserId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model OtpCode {
+  id        String   @id @default(uuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone, createdAt])
+  @@index([phone, code])
+}
+
+model Mission {
+  id                  String        @id @default(uuid())
+  vendorId            String
+  driverId            String?
+  buyerPhone          String
+  buyerName           String?
+  address             String
+  articlePhotoUrls    String[]      @default([])
+  description         String?
+  price               Decimal       @db.Decimal(10, 2)
+  type                MissionType   @default(PARCEL)
+  gasCertified        Boolean       @default(false)
+  category            String?
+  categorySource      String?
+  buyerPresenceConfirmedAt DateTime?
+  scheduledAt         DateTime?     // date et heure programmée pour la livraison
+  scheduledStatus     String?       // "pending" | "assigned" | "in_progress" | "completed" | "cancelled"
+  scheduledReminderDayBeforeSent Boolean @default(false)
+  scheduledReminderOneHourSent   Boolean @default(false)
+  scheduledReminderDueSent       Boolean @default(false)
+  scheduledCancelledReason       String?
+  vendorRatedDriver   Boolean       @default(false)  // le vendeur a noté le livreur
+  driverRatedVendor   Boolean       @default(false)  // le livreur a noté le vendeur
+  driverStatusBeforeMission String?
+  source              String?       // "manual" | "link" | "smart_paste"
+  draftToken          String?       @unique
+  submittedByBuyer    Boolean       @default(false)
+  callInitiatedAt     DateTime?     // horodatage du clic vendeur sur "Appeler" / "WhatsApp" (ne prouve pas que l'appel a abouti)
+  callTarget          String?       // numéro ciblé par l'appel / message
+  callMethod          String?       // "tel" | "whatsapp"
+  buyerConfirmedAt    DateTime?     // l'acheteur a confirmé sa commande
+  buyerConfirmedVia   String?       // "link" | "whatsapp"
+  buyerConfirmToken   String?       @unique
+  deliveryCode             String?       // 4 chiffres hashés (scrypt)
+  deliveryCodeSentAt       DateTime?
+  deliveryCodeVerifiedAt   DateTime?
+  deliveryCodeAttempts     Int           @default(0)
+  driverCallBeforeDepartureAt     DateTime?  // horodatage du clic livreur "Appeler" après PICKED_UP (ne prouve pas que l'appel a abouti)
+  driverCallBeforeDepartureMethod String?    // "tel" | "whatsapp"
+  driverCallAtArrivalAt           DateTime?  // horodatage du clic livreur "Appeler" avant NEARBY
+  driverCallAtArrivalMethod       String?    // "tel" | "whatsapp"
+  buyerUnreachableAt              DateTime?  // photo "client absent" : l'acheteur ne répond pas
+  buyerUnreachablePhoto           String?    // URL de la photo du client absent
+  buyerUnreachableNote            String?    // note libre du livreur
+  buyerPhoneHash      String?       // SHA-256 du téléphone acheteur (N5 fiabilité client)
+  status              MissionStatus @default(CREATED)
+  publicToken         String        @unique @default(uuid())
+  notifChannelUsed    String?
+  notifSentAt         DateTime?
+  notifStatus         String        @default("PENDING")
+  notifResendCount    Int           @default(0)
+  notificationSent    Boolean       @default(false)
+  notificationChannel String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  vendor              User             @relation("VendorMissions", fields: [vendorId], references: [id])
+  driver              User?            @relation("DriverMissions", fields: [driverId], references: [id])
+  messages            Message[]
+  proof               Proof?
+  ratings             Rating[]
+  checkpoints         Checkpoint[]
+  directProposals     DirectProposal[]
+  jevDecisions        JevDecision[]
+
+  @@index([vendorId])
+  @@index([driverId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([publicToken])
+}
+
+enum MissionType {
+  PARCEL
+  GAS
+  GROCERIES
+  OTHER
+}
+
+enum DirectProposalStatus {
+  PENDING
+  ACCEPTED
+  REFUSED
+  EXPIRED
+}
+
+model FavoriteDriver {
+  id                        String   @id @default(uuid())
+  buyerId                   String
+  driverId                  String
+  note                      String?
+  source                    String   @default("manual") // "manual" | "sponsored" | "directory"
+  priorityMissionsRemaining Int      @default(0)
+  createdAt                 DateTime @default(now())
+
+  buyer     User     @relation("UserFavoriteDrivers", fields: [buyerId], references: [id], onDelete: Cascade)
+  driver    User     @relation("FavoritedAsDriver", fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@unique([buyerId, driverId])
+  @@index([buyerId])
+  @@index([driverId])
+}
+
+model DirectProposal {
+  id          String               @id @default(uuid())
+  missionId   String
+  buyerId     String
+  driverId    String
+  status      DirectProposalStatus @default(PENDING)
+  createdAt   DateTime             @default(now())
+  respondedAt DateTime?
+
+  mission     Mission              @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  buyer       User                 @relation("BuyerDirectProposals", fields: [buyerId], references: [id], onDelete: Cascade)
+  driver      User                 @relation("DriverDirectProposals", fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@index([driverId, status])
+  @@index([missionId])
+}
+
+enum MissionStatus {
+  DRAFT
+  CREATED
+  ACCEPTED
+  IN_PROGRESS
+  DELIVERED
+  CANCELLED
+  DISPUTE
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  missionId  String
+  senderId   String
+  content    String
+  createdAt  DateTime @default(now())
+
+  mission    Mission  @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  sender     User     @relation(fields: [senderId], references: [id])
+
+  @@index([missionId])
+}
+
+model Proof {
+  id                String    @id @default(uuid())
+  missionId         String    @unique
+  photoUrl          String
+  signatureUrl      String
+  pdfUrl            String
+  proofHash         String    @unique
+  lat               Float?
+  lng               Float?
+  gpsAccuracy       Float?
+  deviceFingerprint String?
+  tsaToken          String?
+  tsaTimestamp      DateTime?
+  tsaUrl            String?
+  tsaVerified       Boolean   @default(false)
+  capturedAt        DateTime
+  createdAt         DateTime  @default(now())
+
+  mission           Mission   @relation(fields: [missionId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id         String   @id @default(uuid())
+  missionId  String
+  fromUserId String
+  toUserId   String
+  score      Int      @db.SmallInt
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  mission    Mission  @relation(fields: [missionId], references: [id])
+  fromUser   User     @relation("FromUser", fields: [fromUserId], references: [id])
+  toUser     User     @relation("ToUser", fields: [toUserId], references: [id])
+
+  @@index([toUserId])
+}
+
+model Checkpoint {
+  id        String         @id @default(uuid())
+  missionId String
+  type      CheckpointType
+  lat       Float?
+  lng       Float?
+  note      String?
+  photoUrl  String?
+  createdAt DateTime       @default(now())
+
+  mission   Mission        @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@index([missionId])
+}
+
+enum CheckpointType {
+  PICKED_UP
+  IN_TRANSIT
+  NEARBY
+  DELIVERED
+  CUSTOM
+  BUYER_CONFIRMED_PRESENCE
+}
+
+enum AuditEventType {
+  PROOF_CREATED
+  PROOF_VERIFIED
+  PROOF_VIEWED
+  PROOF_EXPORTED
+  MISSION_STATUS_CHANGED
+  KYC_SUBMITTED
+  KYC_VALIDATED
+  KYC_REJECTED
+  BUYER_CONTACT_VIEWED
+  BUYER_PRESENCE_CONFIRMED
+  DRIVER_STATUS_CHANGED
+  FLEET_DRIVER_REMOVED
+  FLEET_DRIVER_VIEWED
+  OFFLINE_NOTIFICATION_SENT
+  OFFLINE_NOTIFICATION_FAILED
+  INVITATION_SENT
+  INVITATION_ACCEPTED
+  INVITATION_EXPIRED
+  REFERRAL_CREATED
+  REFERRAL_COMPLETED
+  REFERRAL_REWARD_APPLIED
+  PRIORITY_MISSION_USED
+  UNSPONSORED
+  REFERRAL_FRAUD_DETECTED
+  REFERRER_BADGE_UPDATED
+  RATING_SUBMITTED
+  SCORE_UPDATED
+  DIRECTORY_VISIBILITY_TOGGLED
+  DIRECTORY_CONTACT_REQUESTED
+  DIRECTORY_CONTACT_ACCEPTED
+  DIRECTORY_CONTACT_REFUSED
+  MISSION_SCHEDULED
+  MISSION_RESCHEDULED
+  SCHEDULED_MISSION_CANCELLED
+  SCHEDULED_MISSION_REMINDER_SENT
+  DRAFT_CREATED_VIA_LINK
+  DRAFT_CREATED_VIA_PASTE
+  SMART_PASTE_SUCCESS
+  SMART_PASTE_FAILED
+  PUBLIC_SLUG_CREATED
+  DRAFT_EXPIRED
+  VENDOR_CALL_INITIATED
+  VENDOR_ORDER_CONFIRMED
+  BUYER_CONFIRMED
+  DELIVERY_CODE_GENERATED
+  DELIVERY_CODE_SENT
+  DELIVERY_CODE_VERIFIED
+  DELIVERY_CODE_FAILED
+  DRIVER_CALL_INITIATED
+  // N3 — Appels livreur + client absent
+  DRIVER_CALL_INITIATED_BEFORE_DEPARTURE
+  DRIVER_CALL_INITIATED_AT_ARRIVAL
+  BUYER_UNREACHABLE_REPORTED
+  // N6 — Carnet de bord public
+  CARNET_VISIBILITY_TOGGLED
+  CARNET_VIEWED
+}
+
+model DirectoryContactRequest {
+  id                String    @id @default(uuid())
+  vendorId          String
+  driverId          String
+  status            String    @default("pending") // "pending" | "accepted" | "refused"
+  driverNotifStatus String?   // "sent" | "failed" : notification de la demande au livreur
+  vendorNotifStatus String?   // "sent" | "failed" : notification de la réponse au vendeur
+  respondedAt       DateTime?
+  createdAt         DateTime  @default(now())
+
+  vendor            User      @relation("DirectoryRequestsSent", fields: [vendorId], references: [id], onDelete: Cascade)
+  driver            User      @relation("DirectoryRequestsReceived", fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@index([driverId, status])
+  @@index([vendorId, driverId, createdAt])
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_MISSION
+  OFFLINE
+}
+
+model Ticket {
+  id        String    @id @default(uuid())
+  vendorId  String
+  quantity  Int
+  used      Int       @default(0)
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+
+  vendor    User      @relation(fields: [vendorId], references: [id])
+
+  @@index([vendorId])
+}
+
+model TicketPurchase {
+  id         String   @id @default(uuid())
+  vendorId   String
+  packSize   Int
+  amountFCFA Int
+  psp        String
+  pspRef     String   @unique
+  status     String
+  webhookRaw Json?
+  createdAt  DateTime @default(now())
+
+  vendor     User     @relation(fields: [vendorId], references: [id])
+
+  @@index([vendorId])
+  @@index([pspRef])
+}
+
+enum SubscriptionPlan {
+  WEEKLY
+  MONTHLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING
+}
+
+model Subscription {
+  id           String             @id @default(uuid())
+  userId       String
+  role         Role
+  plan         SubscriptionPlan
+  priceFCFA    Int
+  startsAt     DateTime
+  endsAt       DateTime
+  status       SubscriptionStatus @default(PENDING)
+  pspRef       String             @unique
+  reminderSent Boolean            @default(false)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([endsAt, status])
+}
+
+model JevDecision {
+  id          String   @id @default(uuid())
+  missionId   String
+  category    String?
+  confidence  Float?
+  status      String
+  latencyMs   Int?
+  rawResponse Json?
+  errorMsg    String?
+  createdAt   DateTime @default(now())
+
+  mission     Mission  @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@index([missionId, createdAt])
+  @@index([status])
+}
+
+model OfflineNotification {
+  id        String   @id @default(uuid())
+  vendorId  String
+  driverId  String
+  channel   String   // "whatsapp" | "sms"
+  messageId String?  // ID retourné par le provider
+  status    String   // "sent" | "failed" | "delivered" | "read"
+  createdAt DateTime @default(now())
+
+  vendor    User     @relation("OfflineNotificationsSent", fields: [vendorId], references: [id], onDelete: Cascade)
+  driver    User     @relation("OfflineNotificationsReceived", fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId, driverId, createdAt])
+  @@index([driverId, createdAt])
+}
+
+model Invitation {
+  id          String   @id @default(uuid())
+  vendorId    String
+  driverPhone String
+  driverName  String
+  token       String   @unique
+  channel     String   // "whatsapp" | "sms"
+  status      String   // "pending" | "accepted" | "expired" | "cancelled"
+  sentAt      DateTime @default(now())
+  acceptedAt  DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  vendor      User     @relation("InvitationsSent", fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId, status])
+  @@index([token])
+  @@index([driverPhone])
+}
+
+model Referral {
+  id                        String   @id @default(uuid())
+  referrerId                String
+  refereeId                 String   @unique
+  type                      String   // "VENDOR_TO_DRIVER" | "DRIVER_TO_DRIVER" | "BUYER_TO_VENDOR"
+  status                    String   // "PENDING" | "ACTIVE" | "COMPLETED" | "CANCELLED"
+  priorityMissionsRemaining Int      @default(3)
+  priorityMissionsUsed      Int      @default(0)
+  rewardGiven               Boolean  @default(false)
+  rewardType                String?  // "discount_10" | "discount_20" | ...
+  refereePhone              String?
+  refereeDeviceFingerprint  String?
+  refereeIpHash             String?  // hash de l'IP au moment de l'inscription
+  createdAt                 DateTime @default(now())
+  completedAt               DateTime?
+
+  referrer                  User     @relation("ReferralsMade", fields: [referrerId], references: [id], onDelete: Cascade)
+  referee                   User     @relation("ReferralReceived", fields: [refereeId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId, status])
+}
+
+model SmartPasteLog {
+  id          String   @id @default(uuid())
+  vendorId    String
+  rawText     String   @db.Text
+  jevResponse Json?
+  status      String   // "success" | "partial" | "failed"
+  missionId   String?
+  createdAt   DateTime @default(now())
+
+  vendor      User     @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId, createdAt])
+}

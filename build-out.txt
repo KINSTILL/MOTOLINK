@@ -1,0 +1,160 @@
+
+> motolink@0.1.0 build
+> next build
+
+  [1m[38;2;173;127;168m▲ Next.js 14.2.24[39m[22m
+  - Environments: .env
+
+ [37m[1m [22m[39m Creating an optimized production build ...
+ [32m[1m✓[22m[39m (serwist) Bundling the service worker script with the URL '/sw.js' and the scope '/'...
+ [32m[1m✓[22m[39m Compiled successfully
+ [37m[1m [22m[39m Linting and checking validity of types ...
+ [37m[1m [22m[39m Collecting page data ...
+ [37m[1m [22m[39m Generating static pages (0/80) ...
+ [37m[1m [22m[39m Generating static pages (20/80) 
+ [37m[1m [22m[39m Generating static pages (40/80) 
+ [37m[1m [22m[39m Generating static pages (60/80) 
+ [32m[1m✓[22m[39m Generating static pages (80/80)
+ [37m[1m [22m[39m Finalizing page optimization ...
+ [37m[1m [22m[39m Collecting build traces ...
+
+[4mRoute (app)[24m                                          [4mSize[24m     [4mFirst Load JS[24m
+┌ ○ /                                                208 B          [37m[1m95.6 kB[22m[39m
+├ ○ /_not-found                                      876 B          [37m[1m89.4 kB[22m[39m
+├ ○ /admin/kyc                                       3.63 kB          [37m[1m99 kB[22m[39m
+├ ƒ /api/admin/kyc/[id]/reject                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/admin/kyc/[id]/validate                     0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/admin/kyc/pending                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/audit/verify                                0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/auth/logout                                 0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/auth/otp                                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/auth/verify                                 0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/buyer-reliability                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/cron/cleanup-drafts                         0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/cron/expire-invitations                     0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/cron/expire-proposals                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/cron/scheduled-reminders                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/cron/subscriptions                          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/direct-proposals/[id]/respond               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/directory/contact-request                   0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/directory/contact-request/[id]              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/directory/drivers                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/drivers/directory-visibility                0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/drivers/status                              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/drivers/unsponsor                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/favorite-drivers                            0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/favorite-drivers/[id]                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/invitations/[token]                         0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/invitations/[token]/accept                  0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/enrollment                              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/file                                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/id-card                                 0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/status                                  0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/syndicate                               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/kyc/upload                                  0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions                                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/accept                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/buyer-unreachable             0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/call-initiated                0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/cancel-scheduled              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/category                      0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/checkpoint                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/confirm-presence              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/finalize-draft                0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/jev                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/messages                      0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/notify                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/presence-status               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/proof                         0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/publish                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/rate                          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/request-new-code              0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/reschedule                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/resend-delivery-code          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/resend-notification           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/resend-presence-notification  0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/missions/[id]/verify-code                   0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/profile                                     0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/proofs/[hash]                               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/proofs/[hash]/export                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/proofs/[hash]/tsa                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/proofs/[hash]/verify                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/proofs/files/[filename]                     0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/public/drivers/[slug]                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/public/missions/[id]                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/public/missions/[id]/buyer-confirm          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/public/missions/draft                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/referrals/apply                             0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/referrals/my-code                           0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/referrals/status                            0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/subscriptions/cancel                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/subscriptions/create                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/subscriptions/status                        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/upload                                      0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/uploads/[filename]                          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/users/me                                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/users/me/carnet-settings                    0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/fleet                               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/fleet/[id]                          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/invite-driver                       0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/notify-offline-driver               0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/notify-offline-driver/[id]          0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/notify-offline-driver/status        0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/public-slug                         0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/vendors/smart-paste                         0 B                [37m[1m0 B[22m[39m
+├ ƒ /api/webhooks/notchpay                           0 B                [37m[1m0 B[22m[39m
+├ ○ /cgu                                             209 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /confirm/[missionId]/[token]                     1.91 kB        [37m[1m97.3 kB[22m[39m
+├ ƒ /d/[slug]                                        208 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /dashboard                                       154 B          [37m[1m88.7 kB[22m[39m
+├ ƒ /dashboard/buyer                                 1.68 kB        [37m[1m90.2 kB[22m[39m
+├ ƒ /dashboard/driver                                6 kB            [37m[1m127 kB[22m[39m
+├ ƒ /dashboard/driver/referrals                      4.79 kB         [37m[1m100 kB[22m[39m
+├ ƒ /dashboard/vendor                                2.83 kB         [37m[1m101 kB[22m[39m
+├ ƒ /dashboard/vendor/agenda                         1.07 kB         [37m[1m101 kB[22m[39m
+├ ƒ /dashboard/vendor/audit                          1.93 kB        [37m[1m97.3 kB[22m[39m
+├ ƒ /dashboard/vendor/directory                      5.38 kB         [37m[1m101 kB[22m[39m
+├ ƒ /dashboard/vendor/fleet                          9.34 kB         [37m[1m107 kB[22m[39m
+├ ƒ /dashboard/vendor/leaderboard                    206 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /drivers/[id]                                    209 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /go/[slug]                                       3.45 kB          [37m[1m92 kB[22m[39m
+├ ƒ /invite/[token]                                  3.26 kB        [37m[1m98.6 kB[22m[39m
+├ ○ /join                                            4.75 kB         [37m[1m100 kB[22m[39m
+├ ƒ /kyc/enrollment                                  2.54 kB        [37m[1m97.9 kB[22m[39m
+├ ƒ /kyc/id-card                                     3.06 kB        [37m[1m98.4 kB[22m[39m
+├ ƒ /kyc/start                                       208 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /kyc/status                                      3.26 kB        [37m[1m98.6 kB[22m[39m
+├ ƒ /kyc/syndicate                                   2.66 kB          [37m[1m98 kB[22m[39m
+├ ○ /legal/cgu                                       209 B          [37m[1m95.6 kB[22m[39m
+├ ○ /legal/mentions                                  208 B          [37m[1m95.6 kB[22m[39m
+├ ○ /legal/privacy                                   210 B          [37m[1m95.6 kB[22m[39m
+├ ○ /login                                           3.09 kB        [37m[1m98.5 kB[22m[39m
+├ ƒ /missions                                        1.6 kB          [37m[1m123 kB[22m[39m
+├ ƒ /missions/[id]                                   7.44 kB         [37m[1m115 kB[22m[39m
+├ ƒ /missions/[id]/proof                             4.37 kB         [37m[1m111 kB[22m[39m
+├ ƒ /missions/[id]/proof/success                     2.14 kB        [37m[1m97.5 kB[22m[39m
+├ ƒ /missions/active                                 2.25 kB         [37m[1m107 kB[22m[39m
+├ ƒ /missions/create                                 154 B          [37m[1m88.7 kB[22m[39m
+├ ƒ /missions/drafts                                 6.45 kB         [37m[1m116 kB[22m[39m
+├ ƒ /missions/history                                210 B          [37m[1m95.6 kB[22m[39m
+├ ƒ /missions/new                                    162 kB          [37m[1m271 kB[22m[39m
+├ ○ /onboarding                                      3.63 kB          [37m[1m99 kB[22m[39m
+├ ƒ /profile                                         7.11 kB         [37m[1m102 kB[22m[39m
+├ ƒ /profile/favorite-drivers                        4.96 kB         [37m[1m100 kB[22m[39m
+├ ƒ /s/[token]                                       154 B          [37m[1m88.7 kB[22m[39m
+├ ƒ /subscription                                    4.63 kB        [37m[1m93.2 kB[22m[39m
+├ ƒ /suivi/[id]                                      7.99 kB         [37m[1m123 kB[22m[39m
+├ ƒ /tickets                                         154 B          [37m[1m88.7 kB[22m[39m
+├ ○ /verify                                          3.85 kB        [37m[1m99.2 kB[22m[39m
+└ ƒ /verify/[hash]                                   3.35 kB        [37m[1m98.7 kB[22m[39m
++ First Load JS shared by all                        [37m[1m88.6 kB[22m[39m
+  ├ chunks/6763-dab1d59833ddd173.js                  33 kB
+  ├ chunks/fd9d1056-e929245d3321b587.js              53.6 kB
+  └ other shared chunks (total)                      1.96 kB
+
+
+ƒ Middleware                                         [37m[1m27.4 kB[22m[39m
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

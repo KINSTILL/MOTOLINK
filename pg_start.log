@@ -1,0 +1,2 @@
+2026-10-27 06:12:55 CET LOG:  redirecting log output to logging collector process
+2026-10-27 06:12:55 CET HINT:  Future log output will appear in directory "pg_log".
