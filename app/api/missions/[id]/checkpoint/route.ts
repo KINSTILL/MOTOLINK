@@ -144,14 +144,22 @@ export async function POST(
         },
       });
 
+      // N8 v2 — Point de départ réel du chrono (premier PICKED_UP uniquement,
+      // pour qu'un second envoi ne réinitialise pas le calcul de ponctualité).
+      const pickedUpAt =
+        type === "PICKED_UP" && !mission.pickedUpAt
+          ? checkpoint.createdAt ?? new Date()
+          : null;
+
       const updatedMission = await tx.mission.update({
         where: { id: mission.id },
         data: {
           status: nextStatus,
+          ...(pickedUpAt ? { pickedUpAt } : {}),
         },
       });
 
-      return { checkpoint, updatedMission };
+      return { checkpoint, updatedMission, pickedUpAt };
     });
 
     if (nextStatus === "DELIVERED" && mission.driverId) {
@@ -189,6 +197,10 @@ export async function POST(
           checkpoint: result.checkpoint,
           photoUrl: pickupPhotoUrl,
           missionStatus: result.updatedMission.status,
+          pickedUpAt:
+            result.pickedUpAt?.toISOString() ??
+            result.updatedMission.pickedUpAt?.toISOString() ??
+            null,
           partial: !hasGps,
         },
         { status: 201 }

@@ -248,6 +248,27 @@ export async function POST(request: Request) {
       );
     }
 
+    // N8 v2 — Un délai de livraison ne peut être fixé qu'avec l'accord explicite de l'acheteur.
+    const hasEstimatedDuration =
+      body?.estimatedDurationMinutes !== undefined &&
+      body?.estimatedDurationMinutes !== null &&
+      body?.estimatedDurationMinutes !== "";
+    if (hasEstimatedDuration && body?.buyerAgreedDuration !== true) {
+      return NextResponse.json(
+        {
+          error: "requiresBuyerAgreement",
+          message:
+            "Vous devez obtenir l'accord de l'acheteur avant de fixer un délai de livraison.",
+          fieldErrors: {
+            buyerAgreedDuration: [
+              "L'accord de l'acheteur est obligatoire pour fixer un délai.",
+            ],
+          },
+        },
+        { status: 400 }
+      );
+    }
+
     const parsed = createMissionSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -273,7 +294,13 @@ export async function POST(request: Request) {
       gasCertified,
       preferredDriverId,
       scheduledAt,
+      distanceKm,
+      estimatedDurationMinutes,
     } = parsed.data;
+
+    // N8 v2 — Délai négocié : la durée n'est stockée que si elle a été confirmée
+    // (le garde `requiresBuyerAgreement` ci-dessus impose déjà buyerAgreedDuration === true).
+    const buyerAgreedDurationAt = hasEstimatedDuration ? new Date() : null;
 
     let scheduledDate: Date | null = null;
     if (scheduledAt && scheduledAt.trim().length > 0) {
@@ -359,6 +386,9 @@ export async function POST(request: Request) {
           callMethod: orderConfirmation?.callMethod ?? null,
           callTarget: orderConfirmation?.callTarget ?? null,
           buyerConfirmToken,
+          distanceKm: distanceKm ?? null,
+          estimatedDurationMinutes: estimatedDurationMinutes ?? null,
+          buyerAgreedDurationAt,
         },
       });
 

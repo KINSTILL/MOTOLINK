@@ -12,10 +12,14 @@ import { setDriverOnMission } from "@/lib/driver-status";
 import { usePriorityMission } from "@/lib/referral";
 
 async function handleAcceptMission(
-  _request: Request,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    // N8 v2 — corps optionnel : le livreur doit accepter explicitement le délai s'il existe
+    const body = await request.json().catch(() => ({} as any));
+    const acceptDuration = body?.acceptDuration === true;
+
     const session = await getSession();
     if (!session || session.role !== "DRIVER") {
       return NextResponse.json(
@@ -73,12 +77,40 @@ async function handleAcceptMission(
       );
     }
 
+    // N8 v2 — Un délai négocié avec l'acheteur doit être accepté explicitement.
+    const requiresDurationAcceptance =
+      mission.estimatedDurationMinutes !== null &&
+      mission.estimatedDurationMinutes !== undefined;
+    if (requiresDurationAcceptance) {
+      if (!acceptDuration) {
+        return NextResponse.json(
+          {
+            error: "requiresDurationAcceptance",
+            message:
+              "Vous devez accepter explicitement le délai de livraison convenu avec l'acheteur.",
+            estimatedDurationMinutes: mission.estimatedDurationMinutes,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    const driverAcceptedDurationAt = requiresDurationAcceptance
+      ? new Date()
+      : null;
+
     const updated = await prisma.mission.update({
       where: { id: mission.id },
       data: {
         driverId: driver.id,
         status: "ACCEPTED",
         driverStatusBeforeMission: driver.driverStatus,
+        ...(requiresDurationAcceptance
+          ? {
+              driverAcceptedDuration: true,
+              driverAcceptedDurationAt,
+            }
+          : {}),
       },
     });
 
@@ -104,6 +136,24 @@ async function handleAcceptMission(
         driverId: driver.id,
       }
     );
+
+    // N8 v2 — Audit : acceptation explicite du délai convenu
+    if (driverAcceptedDurationAt) {
+      try {
+        await logEvent(
+          "DRIVER_ACCEPTED_DURATION",
+          "MISSION",
+          mission.id,
+          driver.id,
+          {
+            estimatedDurationMinutes: mission.estimatedDurationMinutes,
+            driverAcceptedDurationAt: driverAcceptedDurationAt.toISOString(),
+          }
+        );
+      } catch (auditErr) {
+        console.error("[accept] Audit DRIVER_ACCEPTED_DURATION:", auditErr);
+      }
+    }
 
     // Notification "driver_assigned" non-bloquante
     try {

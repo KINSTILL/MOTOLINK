@@ -13,6 +13,8 @@ import { setDriverOnMission } from "@/lib/driver-status";
 
 const respondSchema = z.object({
   response: z.enum(["ACCEPTED", "REFUSED"]),
+  // N8 v2 — acceptation explicite du délai négocié (obligatoire si la mission en a un)
+  acceptDuration: z.boolean().optional(),
 });
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
@@ -209,6 +211,31 @@ export async function PATCH(
         respondedAt: now,
       },
     });
+
+    // N8 v2 — Refus explicite du délai convenu (la mission reste ouverte au marché)
+    if (
+      proposal.mission.estimatedDurationMinutes !== null &&
+      proposal.mission.estimatedDurationMinutes !== undefined
+    ) {
+      try {
+        await logEvent(
+          "DRIVER_REFUSED_DURATION",
+          "MISSION",
+          proposal.missionId,
+          session.userId,
+          {
+            proposalId: proposal.id,
+            estimatedDurationMinutes:
+              proposal.mission.estimatedDurationMinutes,
+          }
+        );
+      } catch (auditErr) {
+        console.error(
+          "[PATCH /api/direct-proposals/[id]/respond] Audit durée refusée:",
+          auditErr
+        );
+      }
+    }
 
     await logEvent(
       "DIRECT_PROPOSAL_REFUSED",

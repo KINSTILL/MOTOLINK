@@ -99,6 +99,19 @@ export const createMissionSchema = z
       .optional()
       .nullable()
       .or(z.literal("")),
+    // N8 v2 — Délai négocié avec l'acheteur (optionnel)
+    distanceKm: z.coerce
+      .number()
+      .positive("La distance doit être supérieure à 0 km")
+      .max(500, "Distance trop élevée")
+      .optional(),
+    estimatedDurationMinutes: z.coerce
+      .number()
+      .int("La durée doit être un nombre entier de minutes")
+      .min(15, "La durée minimale acceptée est de 15 minutes")
+      .max(180, "La durée maximale acceptée est de 180 minutes")
+      .optional(),
+    buyerAgreedDuration: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === "GAS" && !data.gasCertified) {

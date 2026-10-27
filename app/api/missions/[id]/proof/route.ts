@@ -327,6 +327,70 @@ export async function POST(
       }
     );
 
+    // ── N8 v2 — Ponctualité (non-bloquant) ─────────────────────────────────
+    // Calculée uniquement si le délai a été négocié ET accepté par le livreur,
+    // et si la prise en charge a été horodatée.
+    let punctuality: {
+      actualDurationMinutes: number;
+      estimatedDurationMinutes: number;
+      deliveryOnTime: boolean;
+    } | null = null;
+    try {
+      const durationAgreed =
+        mission.pickedUpAt !== null &&
+        mission.estimatedDurationMinutes !== null &&
+        mission.estimatedDurationMinutes !== undefined &&
+        mission.driverAcceptedDuration === true &&
+        mission.buyerAgreedDurationAt !== null;
+
+      if (durationAgreed && mission.driverId) {
+        const actualDurationMinutes = computeActualMinutes(
+          mission.pickedUpAt as Date,
+          capturedAt
+        );
+        const deliveryOnTime = isOnTime(
+          actualDurationMinutes,
+          mission.estimatedDurationMinutes as number
+        );
+        punctuality = {
+          actualDurationMinutes,
+          estimatedDurationMinutes: mission.estimatedDurationMinutes as number,
+          deliveryOnTime,
+        };
+
+        await prisma.$transaction([
+          prisma.mission.update({
+            where: { id: mission.id },
+            data: { actualDurationMinutes, deliveryOnTime },
+          }),
+          prisma.user.update({
+            where: { id: mission.driverId },
+            data: deliveryOnTime
+              ? { onTimeCount: { increment: 1 } }
+              : { lateCount: { increment: 1 } },
+          }),
+        ]);
+
+        await logEvent(
+          deliveryOnTime ? "DELIVERY_ON_TIME" : "DELIVERY_LATE",
+          "MISSION",
+          mission.id,
+          mission.driverId,
+          {
+            actualDurationMinutes,
+            estimatedDurationMinutes: mission.estimatedDurationMinutes as number,
+            pickedUpAt: (mission.pickedUpAt as Date).toISOString(),
+            deliveredAt: capturedAt.toISOString(),
+          }
+        );
+      }
+    } catch (punctualityErr) {
+      console.error(
+        "[POST /api/missions/[id]/proof] Calcul de ponctualité échoué (non-bloquant) :",
+        punctualityErr
+      );
+    }
+
     // 10. Notification "delivered" non-bloquante
     try {
       const link = buildShortTrackingLink(mission.publicToken);
@@ -360,6 +424,13 @@ export async function POST(
         tsaVerified: proof.tsaVerified,
         tsaTimestamp: proof.tsaTimestamp,
         tsaUrl: proof.tsaUrl,
+        ...(punctuality
+          ? {
+              actualDurationMinutes: punctuality.actualDurationMinutes,
+              estimatedDurationMinutes: punctuality.estimatedDurationMinutes,
+              deliveryOnTime: punctuality.deliveryOnTime,
+            }
+          : {}),
       },
       { status: 201 }
     );
